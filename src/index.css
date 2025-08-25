@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Municipal AI Dashboard Design System - Dark theme with blue accents inspired by JSM */
+
+@layer base {
+  :root {
+    /* Dark Municipal Theme Colors */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 225 47% 8%;
+    --card-foreground: 210 40% 95%;
+
+    --popover: 225 47% 8%;
+    --popover-foreground: 210 40% 95%;
+
+    --primary: 199 91% 60%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 225 47% 12%;
+    --secondary-foreground: 210 40% 90%;
+
+    --muted: 225 47% 10%;
+    --muted-foreground: 210 20% 65%;
+
+    --accent: 47 96% 54%;
+    --accent-foreground: 222 47% 6%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 225 47% 15%;
+    --input: 225 47% 12%;
+    --ring: 199 91% 60%;
+
+    --radius: 0.75rem;
+
+    /* Municipal specific colors */
+    --municipal-blue: 199 91% 60%;
+    --municipal-gold: 47 96% 54%;
+    --municipal-dark: 222 47% 6%;
+    --municipal-card: 225 47% 8%;
+    --municipal-border: 199 91% 60%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(199 91% 60%), hsl(47 96% 54%));
+    --gradient-card: linear-gradient(145deg, hsl(225 47% 8%), hsl(225 47% 12%));
+    --gradient-hero: linear-gradient(135deg, hsl(222 47% 6%), hsl(225 47% 8%));
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Shadows */
+    --shadow-municipal: 0 10px 30px -10px hsl(199 91% 60% / 0.2);
+    --shadow-glow: 0 0 40px hsl(199 91% 60% / 0.15);
+    --shadow-card: 0 8px 32px hsl(222 47% 4% / 0.5);
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 225 47% 8%;
+    --card-foreground: 210 40% 95%;
+    --popover: 225 47% 8%;
+    --popover-foreground: 210 40% 95%;
+    --primary: 199 91% 60%;
+    --primary-foreground: 222 47% 6%;
+    --secondary: 225 47% 12%;
+    --secondary-foreground: 210 40% 90%;
+    --muted: 225 47% 10%;
+    --muted-foreground: 210 20% 65%;
+    --accent: 47 96% 54%;
+    --accent-foreground: 222 47% 6%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 225 47% 15%;
+    --input: 225 47% 12%;
+    --ring: 199 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* RTL Support for Persian */
+  [dir="rtl"] {
+    direction: rtl;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/80;
+  }
+}
+
+@layer components {
+  /* Municipal themed components */
+  .municipal-card {
+    @apply bg-card border border-border rounded-xl p-6 shadow-lg;
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(10px);
+    transition: var(--transition-smooth);
+  }
+
+  .municipal-card:hover {
+    @apply border-primary/50;
+    box-shadow: var(--shadow-municipal);
+    transform: translateY(-2px);
+  }
+
+  .municipal-gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .municipal-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Loading animation */
+  .municipal-loading {
+    @apply animate-pulse bg-gradient-to-r from-muted via-muted/50 to-muted rounded;
+  }
+
+  /* Persian font support */
+  .persian-text {
+    font-family: 'Vazirmatn', 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

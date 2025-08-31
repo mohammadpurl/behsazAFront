@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import LoginForm from "@/components/auth/LoginForm";
+import { useAuth } from "@/hooks/useAuth";
 import axios from 'axios';
 import { 
   Send, 
@@ -21,13 +22,6 @@ import {
   LogOut,
   Home
 } from "lucide-react";
-
-interface User {
-  role: string;
-  municipality: string;
-  name: string;
-  permissions: string[];
-}
 
 interface Message {
   id: string;
@@ -50,7 +44,7 @@ interface Conversation {
 }
 
 const ChatPage = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, login, logout } = useAuth();
   const navigate = useNavigate();
   
   const [conversations, setConversations] = useState<Conversation[]>([
@@ -103,12 +97,12 @@ const ChatPage = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (userData: User) => {
-    setUser(userData);
+  const handleLogin = (userData: { role: string; municipality: string; name: string; permissions: string[] }) => {
+    login(userData);
   };
 
   const handleLogout = () => {
-    setUser(null);
+    logout();
   };
 
   const goToDashboard = () => {

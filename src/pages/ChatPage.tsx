@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import LoginForm from "@/components/auth/LoginForm";
+import axios from 'axios';
 import { 
   Send, 
   Plus, 
@@ -34,6 +35,10 @@ interface Message {
   sender: 'user' | 'ai';
   timestamp: Date;
   documents?: string[];
+  search?: {
+    question: string;
+    answer: string;
+  };
 }
 
 interface Conversation {
@@ -114,6 +119,11 @@ const ChatPage = () => {
     return <LoginForm onLogin={handleLogin} />;
   }
 
+
+  const ask = async (query: string, k = 5) => {
+    const { data } = await axios.post('https://behsazabackend.onrender.com/api/query', { question:query });
+    return data; // { query, sources: [...] }
+  };
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
 
@@ -128,17 +138,43 @@ const ChatPage = () => {
     setNewMessage('');
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      const { question, answer } = await ask(newMessage);
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: 'در حال بررسی اسناد برای پاسخ به سوال شما... این یک پاسخ نمونه است.',
+        content: `نتایج جستجو برای: ${question}`,
         sender: 'ai',
-        timestamp: new Date()
+        timestamp: new Date(),
+        search: {
+          question,
+          answer,
+        },
+      };
+
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: 'خطا در دریافت نتایج جستجو. لطفاً مجدداً تلاش کنید.',
+        sender: 'ai',
+        timestamp: new Date(),
       };
       setMessages(prev => [...prev, aiMessage]);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
+
+    // Simulate AI response
+    // setTimeout(() => {
+    //   const aiMessage: Message = {
+    //     id: (Date.now() + 1).toString(),
+    //     content: 'در حال بررسی اسناد برای پاسخ به سوال شما... این یک پاسخ نمونه است.',
+    //     sender: 'ai',
+    //     timestamp: new Date()
+    //   };
+    //   setMessages(prev => [...prev, aiMessage]);
+    //   setIsLoading(false);
+    // }, 2000);
   };
 
   const createNewConversation = () => {
@@ -311,6 +347,22 @@ const ChatPage = () => {
                               <span className="persian-text">{doc}</span>
                             </div>
                           ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {message.search && (
+                      <div className="mt-3 pt-3 border-t border-border/20">
+                        <p className="text-xs text-muted-foreground persian-text mb-2">
+                          پاسخ هوش مصنوعی:
+                        </p>
+                        <div className="space-y-3">
+                          <div className="text-xs persian-text">
+                            <span className="font-medium">پرسش:</span> {message.search.question}
+                          </div>
+                          <div className="text-sm persian-text whitespace-pre-wrap bg-background/40 p-3 rounded-md border border-border/40">
+                            {message.search.answer}
+                          </div>
                         </div>
                       </div>
                     )}
